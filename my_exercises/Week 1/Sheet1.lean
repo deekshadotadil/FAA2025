@@ -18,15 +18,19 @@ def z : ℚ := -0.1
 def P1 : Prop := 1 = 1 -- P has type proposition, and its term is 1 = 1
 def Q1 : Prop := 1 ≠ 1
 
-
+#check P1
 /-!
 ## How to state a theorem in Lean
 
 theorem [name] {optional parameters/assumptions} : [proposition] := [proof]
 -/
 
-theorem one_eq_one : 1 = 1 := sorry
-theorem one_eq_one': P1 := sorry
+theorem one_eq_one : 1 = 1 := by sorry
+theorem one_eq_one': P1 := by sorry
+
+#check one_eq_one
+
+lemma one_nq_one: 1 ≠ 1 := sorry
 
 -- Let's check type of these thoerems
 #check one_eq_one
@@ -65,11 +69,18 @@ variable (P Q: Prop)
 example : P = P := rfl
 example : 2 + 1 + 1 = 4 := rfl
 
-example : P → P := by sorry
+
+
+example : P → P := by
+intro h
+exact h
 
 example : P → (Q → P) := by sorry
 
-example (hP: P) (hQ: Q) : P ∧ Q := by sorry
+example (hP: P) (hQ: Q) : P ∧ Q := by
+constructor
+exact hP
+exact hQ
 
 example: P ∧ Q ↔ Q ∧ P:= by
   constructor

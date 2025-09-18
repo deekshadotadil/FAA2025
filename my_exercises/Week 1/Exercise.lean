@@ -22,11 +22,20 @@ example : P → P := by
 
 -- Exercise 3: Simple implication chain
 example : P → (Q → P) := by
-  sorry
+sorry
+
+
+
 
 -- Exercise 4: Transitivity of implication
 example : (P → Q) → (Q → R) → (P → R) := by
-  sorry
+  intro h1
+  intro h2
+  intro h3
+
+
+
+
 
 -- Exercise 5: Conjunction introduction
 example (hP : P) (hQ : Q) : P ∧ Q := by
