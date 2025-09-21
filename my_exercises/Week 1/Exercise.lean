@@ -22,31 +22,63 @@ example : P → P := by
 
 -- Exercise 3: Simple implication chain
 example : P → (Q → P) := by
-sorry
-
+intro hP hQ
+exact hP
 
 
 
 -- Exercise 4: Transitivity of implication
 example : (P → Q) → (Q → R) → (P → R) := by
-  intro h1
-  intro h2
-  intro h3
-
-
-
+intro hPQ hQR hPR
+apply hQR
+apply hPQ
+exact hPR
 
 
 -- Exercise 5: Conjunction introduction
 example (hP : P) (hQ : Q) : P ∧ Q := by
-  sorry
+  constructor
+  exact hP
+  exact hQ
+
 
 -- Exercise 6: Conjunction commutativity
-example : P ∧ Q ↔ Q ∧ P := sorry
+example : P ∧ Q ↔ Q ∧ P := by
+constructor
+intro h
+obtain ⟨hp,hq⟩ := h
+constructor
+exact hq
+exact hp
+intro h
+refine ⟨h.2,?_⟩
+exact h.1
+
+
+
+
+
+
+
+  -- show forward direction
+  -- [TODO] backward direction
+
+
 
 -- Exercise 7: More complex logical reasoning
 example : (P → Q) ∧ (P → R) → (P → Q ∧ R) := by
-  sorry
+intro h
+obtain ⟨ h1,h2⟩ := h
+intro hP
+constructor
+apply h1
+exact hP
+apply h2
+exact hP
+
+
+
+
 
 end BasicLogic
 
@@ -56,19 +88,39 @@ section ApplyTactic
 variable (P Q R S : Prop)
 
 -- Example: basic apply usage
-example (h1 : P → Q) (h2 : P) : Q := by sorry
+example (h1 : P → Q) (h2 : P) : Q := by
+apply h1
+apply h2
 
 -- Exercise 8: Chaining apply
-example (h1 : P → Q) (h2 : Q → R) (h3 : P) : R := by sorry
+example (h1 : P → Q) (h2 : Q → R) (h3 : P) : R := by
+apply h2
+apply h1
+apply h3
 
 -- Exercise 9: Apply with multiple premises (from w1sheet2 style)
-example (h0 : P ∧ Q ∧ R) (h : P → Q → R → S) : S := by sorry
+example (h0 : P ∧ Q ∧ R) (h : P → Q → R → S) : S := by
+obtain ⟨h1,h2,h3⟩ := h0
+apply h
+exact h1
+exact h2
+exact h3
 
 -- Exercise 10: Mixed apply and intro
-example : (P → Q) → (Q → R) → (P → R) := by sorry
+example : (P → Q) → (Q → R) → (P → R) := by
+intro hPQ hQR hPR
+apply hQR
+apply hPQ
+apply hPR
 
 -- Hint: Chain the implications by working backwards from the goal
-example (P Q R : Prop) : ((P → Q) ∧ (Q → R)) → (P → R) := by sorry
+example (P Q R : Prop) : ((P → Q) ∧ (Q → R)) → (P → R) := by
+intro h
+obtain ⟨h1, h2⟩:= h
+intro hP
+apply h2
+apply h1
+exact hP
 
 
 end ApplyTactic

@@ -22,7 +22,7 @@ example : P → P := by
 
 -- Exercise 3: Simple implication chain
 example : P → (Q → P) := by
-  sorry
+  intro
 
 -- Exercise 4: Transitivity of implication
 example : (P → Q) → (Q → R) → (P → R) := by
