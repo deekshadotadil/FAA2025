@@ -130,15 +130,29 @@ section Functions
 def f := fun x : ℕ ↦ fun y : ℕ ↦ x = y
 
 -- Exercise 11: Basic function application
-example : f 0 0 := by sorry
+example : f 0 0 := by
+rfl
+
 
 -- Exercise 12: Function reasoning
-example (x : ℕ) : f 0 x → x = 0 := by sorry
+example (x : ℕ) : f 0 x → x = 0 := by
+intro h
+rewrite [f] at h
+symm
+assumption
+
+
 
 -- Exercise 13: Function with inequality
-example (x : ℕ) : f x 1 → x ≠ 2 := by sorry
+example (x : ℕ) : f x 1 → x ≠ 2 := by
+intro h
+rw [h]
+trivial
 
 -- Exercise 14: More complex function reasoning
-example (x y : ℕ) : f 0 x ∧ f 0 y → x = y := by sorry
+example (x y : ℕ) : f 0 x ∧ f 0 y → x = y := by
+intro h
+obtain ⟨h1,h2⟩:= h
+rw [← h1,h2]
 
 end Functions
