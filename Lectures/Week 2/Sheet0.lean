@@ -14,7 +14,7 @@ set_option tactic.hygienic false
 -- Working with universal quantifier
 
 /-!
-  Another useage of `intro` tactic
+  Another usage of `intro` tactic
   * `intro` -- to reduce a goal of the form `∀ x : ℕ , P(x)` to `P(x)` and obtain `x : ℕ` as a variable
     i.e., to prove for-all statement, let fix an arbitrary element x, and then we prove P(x)
     This is because, in Lean, ∀ x : N, P(x) is equivalent to (x :ℕ) →  P(x)
@@ -25,7 +25,7 @@ def f (x :ℕ) := x = 0
 example : (∀ x : ℕ, f x) ↔ ((x : ℕ) → f x) := by rfl
 
 example : ∀ n : ℕ, n + 0 = n := by
-  intro n
+  intro x
   rfl
 
 
@@ -37,8 +37,11 @@ example : ∀ n : ℕ, n + 0 = n := by
            -- Use obtain ⟨a, ⟨b, c⟩⟩ := h for nested existentials
 -/
 
-example : ∃ n : ℕ, n + 3 = 7 := by sorry
-example : ∃ n m : ℕ, n + m = 5 := by sorry
+example : ∃ n : ℕ, n + 3 = 7 := by
+ use 4
+
+example : ∃ n m : ℕ, n + m = 5 := by
+use 1,4
 
 -- Definition of an even number.
 def IsEven (n : ℤ) : Prop := ∃ k, n = 2 * k
@@ -48,19 +51,34 @@ def IsEven (n : ℤ) : Prop := ∃ k, n = 2 * k
 example (h : ∃ n : ℤ, IsEven n ∧ n > 10) : ∃ m : ℤ, m > 5 := by
   -- Use `obtain` to get the number `n` and its properties from `h`.
   -- The syntax is: obtain ⟨n, hn_prop⟩ := h
-  sorry
+  obtain ⟨x,⟨h1,h⟩⟩:= h
+  use x
+  omega
+
 
 
 def IsOdd (n : ℤ) : Prop := ∃ k, n = 2 * k + 1
 
 example (n:ℤ) (h : IsEven n) :  IsOdd (n+1) := by
-  unfold IsOdd
-  unfold IsEven at h
-  obtain ⟨k,hk⟩ := h
-  use k
-  rw [hk]
+rw [IsOdd]
+rw [IsEven] at h
+obtain ⟨k,hk⟩:= h
+use k
+rw [hk]
+
+
+--  unfold IsOdd ## alternative
+--  unfold IsEven at h
+--  obtain ⟨k,hk⟩ := h
+--  use k
+--  rw [hk]
 
 
 -- Exercise 0. Prove that the sum of two even numbers is even.
 example (a b:ℤ) (h_a : IsEven a) (h_b : IsEven b) : IsEven (a + b) := by
-  sorry
+  rw [IsEven] at h_a
+  rw [IsEven] at h_b
+  obtain ⟨ka,hka⟩ :=h_a
+  obtain ⟨kb,hkb⟩ :=h_b
+  use ka+kb
+  exact?

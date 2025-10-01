@@ -45,6 +45,13 @@ def S2 : Set (ℕ) := {10,20}
 #check 10 ∈ S1
 #check S1 ⊆ S2
 
+example : S1 ⊆ S2 := by
+  rw[S1,S2, subset_def]
+  intro x hx
+  have h: x=10 := by exact hx
+  rw [h]
+  trivial
+
 example : S1 ⊆ S2 := by simp only [S1, S2, singleton_subset_iff, mem_insert_iff,
   mem_singleton_iff, Nat.reduceEqDiff, or_false]
 
@@ -60,8 +67,8 @@ example : S1 ⊆ S2 := by simp only [S1, S2, singleton_subset_iff, mem_insert_if
 example: (10 ∈ S1) = (S1 10) := by rfl
 
 --  (3) How to define an emptyset?
-def my_emptyset : Set ℕ := sorry
-example: my_emptyset = ∅  := by sorry -- rfl should be enough
+def my_emptyset : Set ℕ := fun _ ↦ False
+example: my_emptyset = ∅  := by rfl -- rfl should be enough
 
 --  (4) How to define a universe set?
 def my_univ : Set ℕ := fun _ ↦ True
@@ -86,10 +93,19 @@ example : ∅ ⊆ A := by
 -- running examples
 #check mem_inter_iff
 example : A ∩ B ⊆ B := by
-  intro x h
-  rw [mem_inter_iff] at h
-  obtain ⟨xA,xB⟩ := h
-  exact xB
+    rw [@subset_def]
+    intro x hx
+    obtain ⟨h1,h2⟩:=hx
+    exact h2
+
+
+
+
+
+  --intro x h ##alternate proof
+  --rw [mem_inter_iff] at h
+  --obtain ⟨xA,xB⟩ := h
+  --exact xB
 
 -- Exercise 1: resolve the sorry
 #check subset_def

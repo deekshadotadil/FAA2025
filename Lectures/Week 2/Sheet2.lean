@@ -32,6 +32,7 @@ example (x : α) : x ∈ A ∨ x ∉ A := by
 -- Example: cases tactics
 example: ∀ x ∈ A ∪ B, x ∈ A ∪ B ∪ C:= by
   intro x hx
+  rw [mem_union] at hx
   cases hx
   left
   left
@@ -39,6 +40,7 @@ example: ∀ x ∈ A ∪ B, x ∈ A ∪ B ∪ C:= by
   left
   right
   exact h
+
 
 -- Exercise 5: Cases tactics. You are allowed to use *only* these two lemmas.
 #check mem_union
