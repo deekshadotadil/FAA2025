@@ -20,17 +20,19 @@ section Quantifiers
 -- Exercise 1: Basic universal quantifier
 -- Hint: Use `intro` to assume an arbitrary element, then prove the property
 example : ∀ n : ℕ, n + 0 = n := by
-  sorry
+  intro
+  rfl
 
 -- Exercise 2: Basic existential quantifier
 -- Hint: Use `use` to provide a witness that satisfies the property
 example : ∃ n : ℕ, n + 3 = 7 := by
-  sorry
+  use 4
 
 -- Exercise 3: Multiple existentials
 -- Hint: Provide witnesses for both variables using `use`
 example : ∃ n m : ℕ, n + m = 5 := by
-  sorry
+  use 1
+  use 4
 
 -- Definition for even numbers
 def IsEven (n : ℤ) : Prop := ∃ k, n = 2 * k
@@ -38,12 +40,19 @@ def IsEven (n : ℤ) : Prop := ∃ k, n = 2 * k
 -- Exercise 4: Working with definitions
 -- Hint: Use `obtain` to extract the witness and property from the existential
 example (h : ∃ n : ℤ, IsEven n ∧ n > 10) : ∃ m : ℤ, m > 5 := by
-  sorry
+   obtain ⟨x,h1,h2⟩ := h
+   use x
+   omega
+
 
 -- Exercise 5: Combining quantifiers with logic
 -- Hint: Unfold the definition, obtain the witness, then provide a new witness
 example (n : ℤ) (h : IsEven n) : IsEven (n + 2) := by
-  sorry
+  rw [IsEven] at h
+  obtain ⟨k,hk⟩ := h
+  use k+1
+  rw [hk]
+  omega
 
 end Quantifiers
 
@@ -63,27 +72,41 @@ variable (A B C D : Set α)
 -- Hint: Rewrite using subset definition, then use `intro` and `assumption`
 #check subset_def
 example : A ⊆ A := by
-  sorry
+  rfl
 
 -- Exercise 7: Empty set is subset of everything
 -- Hint: Use subset definition, then `exfalso` to derive contradiction from empty set membership
 example : ∅ ⊆ A := by
-  sorry
+  intro h x
+  contradiction
 
 -- Exercise 8: Transitivity of subset
 -- Hint: Use subset definition, then chain the implications
 example : A ⊆ B → B ⊆ C → A ⊆ C := by
-  sorry
+  intro h1 h2
+  intro a hx
+  apply h2
+  apply h1
+  exact hx
 
 -- Exercise 9: Intersection subset
 -- Hint: Use subset and intersection definitions
 example : A ∩ B ⊆ B := by
-  sorry
+  intro x hx
+  exact hx.2
 
 -- Exercise 10: Subset intersection characterization
 -- Hint: Use constructor to split the conjunction, then prove each direction
 example : A ⊆ B → A ⊆ C → A ⊆ B ∩ C := by
-  sorry
+  intro h1 h2 x h
+  constructor
+  apply h1
+  exact h
+  apply h2
+  exact h
+
+
+
 
 end SetBasics
 
@@ -101,18 +124,26 @@ variable (A B C : Set α)
 -- Exercise 11: Left inclusion in union
 -- Hint: Use `left` to choose the first disjunct
 example : A ⊆ A ∪ B := by
-  sorry
+  intro x h
+  left
+  exact h
+
 
 -- Exercise 12: Case analysis with excluded middle
 -- Hint: `by_cases` splits into two cases automatically
 example (x : α) : x ∈ A ∨ x ∉ A := by
-  sorry
+  by_cases h: x∈A
+  left
+  exact h
+  right
+  exact h
 
 -- Exercise 13: Union subset characterization
 -- Hint: Use constructor for the biconditional, then `cases` to handle the union
 #check mem_union
 lemma union_subset_iff : A ⊆ C ∧ B ⊆ C ↔ A ∪ B ⊆ C := by
   sorry
+
 
 -- Exercise 14: Using the characterization
 -- Hint: Apply the lemma you just proved
