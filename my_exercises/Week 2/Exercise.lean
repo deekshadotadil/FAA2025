@@ -142,12 +142,41 @@ example (x : α) : x ∈ A ∨ x ∉ A := by
 -- Hint: Use constructor for the biconditional, then `cases` to handle the union
 #check mem_union
 lemma union_subset_iff : A ⊆ C ∧ B ⊆ C ↔ A ∪ B ⊆ C := by
-  sorry
+  constructor
+  · rintro ⟨h1,h2⟩
+    intro x hx
+    cases hx
+    rename_i hA
+    apply h1
+    exact hA
+    rename_i hB
+    apply h2
+    exact hB
+  intro h1
+  rw [subset_def] at h1
+  constructor
+  · intro x hx
+    apply h1
+    left
+    exact hx
+  · intro x hx
+    apply h1
+    right
+    exact hx
+
 
 
 -- Exercise 14: Using the characterization
 -- Hint: Apply the lemma you just proved
 example : B ⊆ A → C ⊆ A → B ∪ C ⊆ A := by
-  sorry
+  intro h1 h2
+  intro x hx
+  cases hx
+  rename_i hB
+  apply h1
+  exact hB
+  rename_i hA
+  apply h2
+  exact hA
 
 end Disjunctions
